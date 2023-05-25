@@ -1,20 +1,26 @@
-#ifndef _MONTY_
-#define _MONTY_
+#ifndef MONTY_H
+#define MONTY_H
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
-#include <ctype.h>
-#include <fcntl.h>
-#include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/uio.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <ctype.h>
+#define Buffsize 30
 
 /**
- * struct stack_s - doubly linked list for a stack or queue
- * @n: integer
- * @prev: points to the previous element of the stack or queue
- * @next: points to the next element of the stack or queue
- * Description: double linked list node structure for monty ALX project
+ * struct stack_s - Doubly linked list representation of a stack (or queue)
+ * @n: Integer
+ * @prev: Points to the previous element of the stack (or queue)
+ * @next: Points to the next element of the stack (or queue)
+ *
+ * Description: Doubly linked list node structure
+ * for stack, queues, LIFO, FIFO
  */
 typedef struct stack_s
 {
@@ -24,30 +30,12 @@ typedef struct stack_s
 } stack_t;
 
 /**
- * struct globals - global structure for function use
- * @lifo: stack or queue
- * @cont: current line
- * @arg: second parameter inside the current line
- * @head: doubly linked list
- * @fd: file descriptor
- * @buffer: input text
- * Description: doubly linked list node structure for ALX monty project
- */
-typedef struct globals
-{
-	int lifo;
-	unsigned int cont;
-	char *arg;
-	stack_t *head;
-	FILE *fd;
-	char *buffer;
-} global_t;
-
-/**
- * struct instruction_s - opcode functions
+ * struct instruction_s - Opcode and its function
  * @opcode: the opcode
  * @f: function to handle the opcode
- * Description: opcode and its function for ALX monty project
+ *
+ * Description: opcode and its function
+ * for stack, queues, LIFO, FIFO
  */
 typedef struct instruction_s
 {
@@ -55,24 +43,61 @@ typedef struct instruction_s
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-void _push(stack_t **stack, unsigned int line_number);
-void _pall(stack_t **stack, unsigned int line_number);
 
-void (*get_opcodes(char *opc))(stack_t **stack, unsigned int line_number);
+/**
+ * struct glob_var - golbal variables
+ * @file: file name
+ * @buff: Getline buffer
+ * @tmp: Getline counter
+ * @dict: instruction dictionary
+ * @head: pointer to list
+ * @line_number: Stores file current line
+ * @MODE: Program configuration stack or queue
+ */
+typedef struct glob_var
+{
+	FILE *file;
+	char *buff;
+	size_t tmp;
+	instruction_t *dict;
+	stack_t *head;
+	unsigned int line_number;
+	int MODE;
+} vars;
 
-/*imported functions*/
-int _sch(char *s, char c);
-char *_strtoky(char *s, char *d);
-void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
-void *_calloc(unsigned int nmemb, unsigned int size);
-int _strcmp(char *s1, char *s2);
 
-/* doubly linked list functions */
-stack_t *add_dnodeint_end(stack_t **head, const int n);
-stack_t *add_dnodeint(stack_t **head, const int n);
-void free_dlistint(stack_t *head);
-void free_vglo(void);
+extern vars var;
 
-extern global_t vglo;
+/* main.c */
+int start_vars(vars *var);
+instruction_t *create_instru();
+int call_funct(vars *var, char *opcode);
+void free_all(void);
+int _isdigit(char *string);
 
-#endif /* _MONTY_ */
+/* opfunc.c */
+void pall(stack_t **stack, unsigned int line_number);
+void push(stack_t **stack, unsigned int line_number);
+void pint(stack_t **stack, unsigned int line_number);
+void pop(stack_t **stack, unsigned int line_number);
+
+/* op_funct2.c */
+void swap(stack_t **stack, unsigned int line_number);
+void add(stack_t **stack, unsigned int line_number);
+void sub(stack_t **stack, unsigned int line_number);
+void divi(stack_t **stack, unsigned int line_number);
+
+/* opfunc3.c */
+void mul(stack_t **stack, unsigned int line_number);
+void mod(stack_t **stack, unsigned int line_number);
+void pchar(stack_t **stack, unsigned int line_number);
+void pstr(stack_t **stack, unsigned int line_number);
+
+/* opfunc4.c */
+void rotl(stack_t **stack, unsigned int line_number);
+void rotr(stack_t **stack, unsigned int line_number);
+void stack(stack_t **stack, unsigned int line_number);
+void queue(stack_t **stack, unsigned int line_number);
+
+
+#endif
