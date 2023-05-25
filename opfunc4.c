@@ -1,74 +1,63 @@
 #include "monty.h"
 
 /**
- * rotl - s
- * @stack: Double linked list
- * @line_number: File line execution
+ * _rotl - rotates the first element to the bottom and  the second to the top
+ *
+ * @doubly: head of the linked list
+ * @cline: line number;
+ * Return: no return
  */
-void rotl(stack_t **stack, unsigned int line_number)
+void _rotl(stack_t **doubly, unsigned int cline)
 {
-	stack_t *tm = *stack;
-	(void) line_number;
+	stack_t *aux1 = NULL;
+	stack_t *aux2 = NULL;
+	(void)cline;
 
-	if (!stack || !*stack || !(*stack)->next)
-		return;
-	(*stack)->next->prev = NULL;
-	while (tm->next)
-		tm = tm->next;
-	tm->next = *stack;
-	(*stack) = (*stack)->next;
-	tm->next->next = NULL;
-	tm->next->prev = tm;
-}
-
-/**
- * rotr - s
- * @stack: Double linked list
- * @line_number: File line execution
- */
-void rotr(stack_t **stack, unsigned int line_number)
-{
-	stack_t *tmp;
-	(void) line_number;
-
-	if (!stack || !*stack || !(*stack)->next)
+	if (*doubly == NULL)
 		return;
 
-	tmp = *stack;
-	while (tmp->next)
-		tmp = tmp->next;
+	if ((*doubly)->next == NULL)
+		return;
 
-	tmp->next = *stack;
-	tmp->prev->next = NULL;
-	tmp->prev = NULL;
+	aux1 = (*doubly)->next;
+	aux2 = *doubly;
 
-	(*stack)->prev = tmp;
-	*stack = tmp;
+	for (; aux2->next != NULL; aux2 = aux2->next)
+		;
 
+	aux1->prev = NULL;
+	aux2->next = *doubly;
+	(*doubly)->next = NULL;
+	(*doubly)->prev = aux2;
+	*doubly = aux1;
 }
 
 /**
- * stack - s
- * @stack: Double linked list
- * @line_number: File line execution
+ * _rotr - reverse the stack
+ *
+ * @doubly: head of the linked list
+ * @cline: line number
+ * Return: no return
  */
-void stack(stack_t **stack, unsigned int line_number)
+void _rotr(stack_t **doubly, unsigned int cline)
 {
-	(void) line_number;
-	(void) stack;
+	stack_t *aux = NULL;
+	(void)cline;
 
-	var.MODE = 0;
-}
+	if (*doubly == NULL)
+		return;
 
-/**
- * queue - s
- * @stack: Double linked list
- * @line_number: File line execution
- */
-void queue(stack_t **stack, unsigned int line_number)
-{
-	(void) line_number;
-	(void) stack;
+	if ((*doubly)->next == NULL)
+		return;
 
-	var.MODE = 1;
+	aux = *doubly;
+
+	for (; aux->next != NULL; aux = aux->next)
+		;
+
+	aux->prev->next = NULL;
+	aux->next = *doubly;
+	aux->prev = NULL;
+	(*doubly)->prev = aux;
+	*doubly = aux;
 }

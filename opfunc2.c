@@ -1,82 +1,102 @@
 #include "monty.h"
 
 /**
- * swap - Delete top of list
- * @stack: Double linked list
- * @line_number: File line execution
+ * _queue - sets the format of the data to a queue (FIFO)
+ *
+ * @doubly: head of the linked list
+ * @cline: line number;
+ * Return: no return
  */
-void swap(stack_t **stack, unsigned int line_number)
+void _queue(stack_t **doubly, unsigned int cline)
 {
-	int tmp;
+	(void)doubly;
+	(void)cline;
 
-	if (!*stack || !(*stack)->next)
-	{
-		fprintf(stderr, "L%u: can't swap, stack too short\n",
-			line_number);
-		free_all();
-		exit(EXIT_FAILURE);
-	}
-	tmp = (*stack)->n;
-	(*stack)->n = (*stack)->next->n;
-	(*stack)->next->n = tmp;
+	vglo.lifo = 0;
 }
 
 /**
- * add - add the top two elements of the stack
- * @stack: Double linked list
- * @line_number: File line execution
+ * _stack - sets the format fo the data to a stack (LIFO)
+ *
+ * @doubly: head of the linked list
+ * @cline: line number;
+ * Return: no return
  */
-void add(stack_t **stack, unsigned int line_number)
+void _stack(stack_t **doubly, unsigned int cline)
 {
-	if (!*stack || !(*stack)->next)
-	{
-		fprintf(stderr, "L%u: can't add, stack too short\n",
-			line_number);
-		free_all();
-		exit(EXIT_FAILURE);
-	}
-	(*stack)->next->n = (*stack)->next->n + (*stack)->n;
-	pop(stack, line_number);
+	(void)doubly;
+	(void)cline;
+
+	vglo.lifo = 1;
 }
 
 /**
- * sub - substract the top two elements of the stack
- * @stack: Double linked list
- * @line_number: Line counter
+ * _add - adds the top two elements of the stack
+ *
+ * @doubly: head of the linked list
+ * @cline: line number;
+ * Return: no return
  */
-void sub(stack_t **stack, unsigned int line_number)
+void _add(stack_t **doubly, unsigned int cline)
 {
-	if (!*stack || !(*stack)->next)
+	int m = 0;
+	stack_t *aux = NULL;
+
+	aux = *doubly;
+
+	for (; aux != NULL; aux = aux->next, m++)
+		;
+
+	if (m < 2)
 	{
-		fprintf(stderr, "L%u: can't sub, stack too short\n",
-			line_number);
-		free_all();
+		fprintf(stderr, "L%u: can't add, stack too short\n", cline);
+		free_vglo();
 		exit(EXIT_FAILURE);
 	}
-	(*stack)->next->n = (*stack)->next->n - (*stack)->n;
-	pop(stack, line_number);
+
+	aux = (*doubly)->next;
+	aux->n += (*doubly)->n;
+	_pop(doubly, cline);
 }
 
 /**
- * divi - divide the top two elements of the stack
- * @stack: Double linked list
- * @line_number: File line counter
+ * _nop - doesn't do anythinhg
+ *
+ * @doubly: head of the linked list
+ * @cline: line number;
+ * Return: no return
  */
-void divi(stack_t **stack, unsigned int line_number)
+void _nop(stack_t **doubly, unsigned int cline)
 {
-	if (!*stack || !(*stack)->next)
+	(void)doubly;
+	(void)cline;
+}
+
+/**
+ * _sub - subtracts the top element to the second top element of the stack
+ *
+ * @doubly: head of the linked list
+ * @cline: line number;
+ * Return: no return
+ */
+void _sub(stack_t **doubly, unsigned int cline)
+{
+	int m = 0;
+	stack_t *aux = NULL;
+
+	aux = *doubly;
+
+	for (; aux != NULL; aux = aux->next, m++)
+		;
+
+	if (m < 2)
 	{
-		fprintf(stderr, "L%u: can't div, stack too short\n",
-			line_number);
-		free_all();
+		fprintf(stderr, "L%u: can't sub, stack too short\n", cline);
+		free_vglo();
 		exit(EXIT_FAILURE);
 	}
-	if ((*stack)->n == 0)
-	{
-		fprintf(stderr, "L%u: division by zero\n", line_number);
-		free_all();
-		exit(EXIT_FAILURE);
-	}
-	(*stack)->next->n = (*stack)->next->n / (*stack)->n;
-	pop(stack, line_number);
+
+	aux = (*doubly)->next;
+	aux->n -= (*doubly)->n;
+	_pop(doubly, cline);
 }
