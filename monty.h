@@ -68,12 +68,16 @@ typedef struct glob_var
 
 extern vars var;
 
-/* main.c */
+/* util.c */
 int start_vars(vars *var);
 instruction_t *create_instru();
 int call_funct(vars *var, char *opcode);
 void free_all(void);
 int _isdigit(char *string);
+
+/* util2.c */
+ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
+int _isascii(int c);
 
 /* opfunc.c */
 void pall(stack_t **stack, unsigned int line_number);

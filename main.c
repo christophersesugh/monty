@@ -1,7 +1,6 @@
 #include "monty.h"
-/*
+
 vars var;
-*/
 
 /**
  * main - Start LIFO, FILO program
@@ -12,7 +11,6 @@ vars var;
 int main(int ac, char **av)
 {
 	char *opcode;
-	vars var;
 
 	if (ac != 2)
 	{
@@ -31,7 +29,7 @@ int main(int ac, char **av)
 		return (EXIT_FAILURE);
 	}
 
-	while (getline(&var.buff, &var.tmp, var.file) != EOF)
+	while (_getline(&var.buff, &var.tmp, var.file) != EOF)
 	{
 		opcode = strtok(var.buff, " \r\t\n");
 		if (opcode != NULL)

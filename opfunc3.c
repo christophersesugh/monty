@@ -57,7 +57,7 @@ void pchar(stack_t **stack, unsigned int line_number)
 		free_all();
 		exit(EXIT_FAILURE);
 	}
-	if (isascii((*stack)->n))
+	if (_isascii((*stack)->n))
 	{
 		printf("%c\n", (*stack)->n);
 		return;
@@ -86,7 +86,7 @@ void pstr(stack_t **stack, unsigned int line_number)
 	{
 		if (tmp->n == 0)
 			break;
-		if (!isascii((tmp)->n))
+		if (!_isascii((tmp)->n))
 			break;
 		putchar(tmp->n);
 		tmp = tmp->next;
