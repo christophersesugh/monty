@@ -8,6 +8,7 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include "dbg.h"
 
 /**
  * struct stack_s - doubly linked list for a stack or queue
